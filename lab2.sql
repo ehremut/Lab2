@@ -1,0 +1,75 @@
+CREATE TABLE ACCOUNTANT (
+    id_accountant INT NOT NULL PRIMARY KEY,
+    salary INT NOT NULL
+)
+
+CREATE TABLE MANAGER (
+    id_manager INT NOT NULL PRIMARY KEY,
+    id_accountant INT FOREIGN KEY REFERENCES ACCOUNTANT(id_accountant)
+)
+
+CREATE TABLE OBJECT (
+    id_object INT NOT NULL PRIMARY KEY,
+    id_manager INT FOREIGN KEY REFERENCES MANAGER(id_manager)
+)
+
+CREATE TABLE BUILDER (
+    id_builder INT NOT NULL PRIMARY KEY,
+    post VARCHAR(15) NOT NULL,
+    id_accountant INT FOREIGN KEY REFERENCES ACCOUNTANT(id_accountant)
+)
+
+CREATE TABLE BUILDER_OF_OBJECT (
+    id_builder_of_object INT NOT NULL PRIMARY KEY,
+    id_builder INT FOREIGN KEY REFERENCES BUILDER(id_builder),
+    id_object INT FOREIGN KEY REFERENCES OBJECT(id_object),
+    work_time INT NOT NULL
+)
+
+CREATE TABLE SUPPLIER (
+    id_supplier INT NOT NULL PRIMARY KEY
+)
+
+CREATE TABLE GOODS (
+    id_goods INT NOT NULL PRIMARY KEY
+)
+
+CREATE TABLE ORDERS (
+    id_order INT NOT NULL PRIMARY KEY,
+    id_manager INT FOREIGN KEY REFERENCES MANAGER(id_manager),
+    id_supplier INT FOREIGN KEY REFERENCES SUPPLIER(id_supplier)
+)
+
+CREATE TABLE DELIVERY (
+    id_delivery INT NOT NULL PRIMARY KEY,
+    id_supplier INT FOREIGN KEY REFERENCES SUPPLIER(id_supplier),
+    id_goods INT FOREIGN KEY REFERENCES GOODS(id_goods),
+    weight INT NOT NULL
+)
+
+CREATE TABLE WAREHOUSE (
+    id_warehouse INT NOT NULL PRIMARY KEY
+)
+
+CREATE TABLE ORDERS_DELIVERY (
+    id_order_delivery INT NOT NULL PRIMARY KEY,
+    id_delivery INT FOREIGN KEY REFERENCES DELIVERY(id_delivery),
+    id_order INT FOREIGN KEY REFERENCES ORDERS(id_order)
+)
+
+CREATE TABLE ORDERS_DELIVERY_TO_WAREHOUSE (
+    id_order_delivery_to_warehouse INT NOT NULL PRIMARY KEY,
+    id_order_delivery INT FOREIGN KEY REFERENCES ORDERS_DELIVERY(id_order_delivery),
+    id_warehouse INT FOREIGN KEY REFERENCES WAREHOUSE(id_warehouse)
+)
+
+CREATE TABLE DRIVER (
+    id_driver INT NOT NULL PRIMARY KEY,
+    id_accountant INT FOREIGN KEY REFERENCES ACCOUNTANT(id_accountant)
+)
+
+CREATE TABLE TRANSPORTATION_OF_GOODS (
+    id_transportation_of_goods INT NOT NULL PRIMARY KEY,
+    id_driver INT FOREIGN KEY REFERENCES DRIVER(id_driver),
+    id_order_delivery_to_warehouse INT FOREIGN KEY REFERENCES ORDERS_DELIVERY_TO_WAREHOUSE(id_order_delivery_to_warehouse)
+)
